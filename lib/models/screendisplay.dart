@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:collection';
-import 'dart:math';
+import 'dart:math' as math;
 import 'stack.dart' as st;
+import 'package:tuple/tuple.dart';
+import 'dart:developer';
 
 class screenstatus with ChangeNotifier {
   static String screen = "AC";
@@ -32,78 +34,88 @@ class screenstatus with ChangeNotifier {
   }
 
   String calc(String s) {
-    List l = ['+', '-', '*', '/', '%', '^'];
-    final stk = st.Stack<String>();
-    int r = 0;
-    for (int i = 0; i < s.length; i++) {
-      int x = s.codeUnitAt(i) - 48;
-      if (x >= 0 && x <= 9) {
-        if (r == 0) {
-          r = x;
-        } else
-          r = r * 10 + x;
-      }
-      if (l.contains(s[i])) {
-        stk.push(r.toString());
-        r = 0;
-        stk.push(s[i]);
-      } else if (s[i] == '(') {
-        if (r != 0) {
-          stk.push(r.toString());
-          r = 0;
-        }
-        stk.push('(');
-      } else //           ')'
-      {
-        if (r != 0) {
-          stk.push(r.toString());
-          r = 0;
-        }
-        String t = stk.pop();
-        String temp = "";
-        while (t != '(') {
-          temp += t;
-          t = stk.pop();
-        }
-        //
-        stk.push(calc(reverse(temp)));
-      }
-    }
-    Queue q = stk.getqueue();
-    //TODO::Handle negatives
-    Queue q2 = Queue();
-    double t = double.parse(q.removeFirst());
+    //easier method is to convert expr to postfix(it removes brackets too) to handle neggatives be careful and then evaluate
+    Queue q = postfix(s);
+    if (q.isEmpty) return "INVALID";
     while (q.isNotEmpty) {
-      var x = q.removeFirst();
-      if (x == '+' || x == '-') {
-        q2.addLast(t.toString());
-        t = q.removeFirst();
-        q2.addLast(x);
-      } else {
-        var y = double.parse(q.removeFirst());
-        if (x == '*') {
-          t = t * y;
-        } else if (x == '/') {
-          t = t / y;
-        } else if (x == '%')
-          t = t % y;
-        else
-          t = pow(t, y);
-      }
+      log(q.removeFirst());
     }
-    if (t != 0) q2.addLast(t);
-    //noow we have handled priority 1 operators now only + or -
-    double ans = double.parse(q2.removeFirst());
-    while (q2.isNotEmpty) {
-      var y = q2.removeFirst();
-      double z = double.parse(q2.removeFirst());
-      if (y == '+') {
-        ans += z;
-      } else {
-        ans -= z;
-      }
-    }
-    return ans.toString();
+    return "";
     //FIRST DRAFT COMPLETE
+  }
+
+  bool compare(
+      String s, String t) //true for DONT POP if s on top and t has arrived
+  {
+    if (s == t) {
+      return false;
+    }
+    List l3 = ['+', '-'];
+    List l1 = ['^'];
+    List l2 = ['*', '/', '%'];
+    if (l1.contains(t) || s == '(')
+      return true;
+    else if (l2.contains(t)) {
+      if (l1.contains(s) || l2.contains(s))
+        return false;
+      else
+        return true;
+    } else
+      return false;
+  }
+
+  Queue postfix(String s) {
+    var stk = st.Stack();
+    int op = 0;
+    var q = Queue();
+    int i = 0;
+    //if 2 operators together then second must be - or it is invalid in case it is - then take the next operand(must be)  appended with -
+    //forgot to see multiple dig numbers
+    while (i < s.length) {
+      log(i.toString() + " index");
+      var x = s[i];
+      int a = s.codeUnitAt(i) - 48;
+      if (a >= 0 && a <= 9) {
+        q.addLast(x);
+        op = 0;
+      } else {
+        if (op == 1) {
+          log("point 1");
+          if (s[i] != '-')
+            return Queue();
+          else {
+            op = 0;
+            log("ran " + i.toString());
+            if (s.codeUnitAt(i + 1) - 48 >= 0 && s.codeUnitAt(i + 1) - 48 <= 9)
+              q.addLast('-' + s[i + 1]);
+            else {
+              return Queue();
+            }
+            i++;
+          }
+        }
+        //operator
+        else if (x == '(') {
+          stk.push(x);
+          op = 1;
+        } else if (x == ')') {
+          op = 1;
+          var z = stk.top();
+          while (z != '(') {
+            q.addLast(stk.pop());
+          }
+        } else {
+          op = 1;
+          while (!stk.isEmpty && compare(stk.top(), x) == false) {
+            var z = stk.pop();
+            q.addLast(z);
+          }
+          stk.push(x);
+        }
+      }
+      i++;
+    }
+    while (!stk.isEmpty) q.addLast(stk.pop());
+    return q;
   }
 }

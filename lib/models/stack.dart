@@ -1,5 +1,7 @@
 import 'dart:collection';
 
+import 'package:flutter/material.dart';
+
 class Stack<T> {
   final _stack = Queue<T>();
   Queue getqueue() {
@@ -8,6 +10,10 @@ class Stack<T> {
 
   void push(T element) {
     _stack.addLast(element);
+  }
+
+  T top() {
+    return _stack.last;
   }
 
   T pop() {
@@ -22,3 +28,14 @@ class Stack<T> {
 
   bool get isEmpty => _stack.isEmpty;
 }
+
+// class Pair
+// {
+//  String first;
+//  int second;
+//  Pair(String x,int y)
+//  {
+//    first=x;
+//    second=y;
+//  }
+// }
