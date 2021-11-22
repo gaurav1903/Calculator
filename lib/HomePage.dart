@@ -9,7 +9,10 @@ class HomePage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => screenstatus(),
       child: Scaffold(
-          appBar: AppBar(title: Text('Gaurav Scientific Calculator')),
+          appBar: AppBar(
+            title: Text("Gaurav's Calculator"),
+            backgroundColor: Colors.deepPurple,
+          ),
           body: Calc()),
     );
   }
