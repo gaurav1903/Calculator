@@ -4,11 +4,13 @@ import 'package:flutter/widgets.dart';
 import 'models/screendisplay.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer';
+import 'package:flutter/services.dart';
 
 class Calc extends StatelessWidget {
   String screen = screenstatus().getscreen();
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     return Stack(children: [
       Container(
           height: MediaQuery.of(context).size.height, color: Colors.black),
@@ -29,6 +31,7 @@ class Screen extends StatefulWidget {
 }
 
 class _ScreenState extends State<Screen> {
+  @override
   @override
   Widget build(BuildContext context) {
     screenstatus s = Provider.of<screenstatus>(context);
@@ -136,7 +139,7 @@ class Keypad extends StatelessWidget {
   }
 }
 
-//TODO::FULL SCREEN MODE AND AUTO SCROLL TO BOTTOM
+//TODO::AUTO SCROLL TO BOTTOM
 class Keyboard_Button extends StatelessWidget {
   String s;
   int f;
