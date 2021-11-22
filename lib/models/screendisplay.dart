@@ -63,6 +63,7 @@ class screenstatus with ChangeNotifier {
     //easier method is to convert expr to postfix(it removes brackets too) to handle neggatives be careful and then evaluate
     Queue q = postfix(s);
     if (q.isEmpty) return "INVALID";
+    log(q.toList().toString());
     return postfixeval(q);
     //FIRST DRAFT COMPLETE
   }
@@ -98,6 +99,7 @@ class screenstatus with ChangeNotifier {
       log(i.toString() + " $op index");
       var x = s[i];
       int a = s.codeUnitAt(i) - 48;
+      log("check here");
       if (a >= 0 && a <= 9) {
         if (op == 0) {
           //
@@ -115,13 +117,13 @@ class screenstatus with ChangeNotifier {
         q.addLast(x);
         op = 0;
       } else {
-        if (op == 1) {
-          // log("point 1");
+        if (op == 1 && x != '(') {
+          log("point 1");
           if (s[i] != '-')
             return Queue();
           else {
             op = 0;
-            // log("ran " + i.toString());
+            log("ran " + i.toString());
             if (s.codeUnitAt(i + 1) - 48 >= 0 && s.codeUnitAt(i + 1) - 48 <= 9)
               q.addLast('-' + s[i + 1]);
             else {
@@ -138,8 +140,11 @@ class screenstatus with ChangeNotifier {
           op = 1;
           var z = stk.top();
           while (z != '(') {
+            //TODO::SET WRONG INPUT
             q.addLast(stk.pop());
+            z = stk.top();
           }
+          stk.pop();
         } else {
           //*,/,%,^
           op = 1;
