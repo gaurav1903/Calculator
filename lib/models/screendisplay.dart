@@ -21,7 +21,6 @@ class screenstatus with ChangeNotifier {
   }
 
   void outputresult(String s) {
-    ///TODO:LOGIC FOR COMPUTING CALC
     String ans = calc(s);
     screen = ans;
     notifyListeners();
@@ -38,6 +37,7 @@ class screenstatus with ChangeNotifier {
     while (q.isNotEmpty) {
       var z = q.removeFirst();
       if (['+', '-', '*', '/', '%', '^'].contains(z)) {
+        if (s.size < 2) return "INVALID";
         var b = s.pop();
         var a = s.pop();
         if (z == '+')
@@ -94,7 +94,6 @@ class screenstatus with ChangeNotifier {
     var q = Queue();
     int i = 0;
     //if 2 operators together then second must be - or it is invalid in case it is - then take the next operand(must be)  appended with -
-    //forgot to see multiple dig numbers
     while (i < s.length) {
       log(i.toString() + " $op index");
       var x = s[i];
@@ -140,8 +139,11 @@ class screenstatus with ChangeNotifier {
           op = 1;
           var z = stk.top();
           while (z != '(') {
-            //TODO::SET WRONG INPUT
+            //TODO::OVERFLOW
             q.addLast(stk.pop());
+            if (q.isEmpty) {
+              return Queue();
+            }
             z = stk.top();
           }
           stk.pop();

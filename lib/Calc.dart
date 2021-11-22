@@ -136,7 +136,7 @@ class Keypad extends StatelessWidget {
   }
 }
 
-//TODO::FUNCTIONALITY FOR = AND DEL AND FULL SCREEN MODE AND AUTO SCROLL TO BOTTOM
+//TODO::FULL SCREEN MODE AND AUTO SCROLL TO BOTTOM
 class Keyboard_Button extends StatelessWidget {
   String s;
   int f;
@@ -156,9 +156,7 @@ class Keyboard_Button extends StatelessWidget {
             s1.outputresult(screen);
           } else if (s == "DEL") {
             s1.setscreen(screen.substring(0, screen.length - 1));
-          }
-          //TODO::ADD A DELETE LAST CHAR BUTTON
-          else {
+          } else {
             screen == "AC" ? screen = s : screen += s;
             s1.setscreen(screen);
           }

@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 
 class Stack<T> {
+  int size = 0;
   final _stack = Queue<T>();
   Queue getqueue() {
     return _stack;
@@ -10,6 +11,7 @@ class Stack<T> {
 
   void push(T element) {
     _stack.addLast(element);
+    size += 1;
   }
 
   T top() {
@@ -17,6 +19,7 @@ class Stack<T> {
   }
 
   T pop() {
+    size -= 1;
     final T lastElement = _stack.last;
     _stack.removeLast();
     return lastElement;
@@ -24,6 +27,7 @@ class Stack<T> {
 
   void clear() {
     _stack.clear();
+    size = 0;
   }
 
   bool get isEmpty => _stack.isEmpty;
