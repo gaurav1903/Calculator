@@ -38,7 +38,7 @@ class _ScreenState extends State<Screen> {
         borderRadius: BorderRadius.circular(10),
         color: Colors.grey.shade800,
       ),
-      height: 300,
+      height: 250,
       child: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(10),
@@ -65,65 +65,73 @@ class Keypad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Container(
-          color: Colors.black,
-          // height: MediaQuery.of(context).size.height - 220,
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(children: [
-                  Keyboard_Button("1"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("4"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("7"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("0"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("+")
-                ]),
-              ),
-              Expanded(
-                child: Column(children: [
-                  Keyboard_Button("2"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("5"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("8"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("("),
-                  SizedBox(height: 5),
-                  Keyboard_Button("-"),
-                ]),
-              ),
-              Expanded(
-                child: Column(children: [
-                  Keyboard_Button("3"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("6"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("9"),
-                  SizedBox(height: 5),
-                  Keyboard_Button(")"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("*"),
-                ]),
-              ),
-              Expanded(
-                child: Column(children: [
-                  Keyboard_Button("AC"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("%"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("^"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("/"),
-                  SizedBox(height: 5),
-                  Keyboard_Button("="),
-                ]),
-              ),
-            ],
-          )),
+      child: Column(
+        // mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: Container(
+                color: Colors.black,
+                // height: MediaQuery.of(context).size.height - 220,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(children: [
+                        Keyboard_Button("1"),
+                        SizedBox(height: 5),
+                        Keyboard_Button("4"),
+                        SizedBox(height: 5),
+                        Keyboard_Button("7"),
+                        SizedBox(height: 5),
+                        Keyboard_Button("0"),
+                        SizedBox(height: 5),
+                        Keyboard_Button("+")
+                      ]),
+                    ),
+                    Expanded(
+                      child: Column(children: [
+                        Keyboard_Button("2"),
+                        SizedBox(height: 5),
+                        Keyboard_Button("5"),
+                        SizedBox(height: 5),
+                        Keyboard_Button("8"),
+                        SizedBox(height: 5),
+                        Keyboard_Button("("),
+                        SizedBox(height: 5),
+                        Keyboard_Button("-"),
+                      ]),
+                    ),
+                    Expanded(
+                      child: Column(children: [
+                        Keyboard_Button("3"),
+                        SizedBox(height: 5),
+                        Keyboard_Button("6"),
+                        SizedBox(height: 5),
+                        Keyboard_Button("9"),
+                        SizedBox(height: 5),
+                        Keyboard_Button(")"),
+                        SizedBox(height: 5),
+                        Keyboard_Button("*"),
+                      ]),
+                    ),
+                    Expanded(
+                      child: Column(children: [
+                        Keyboard_Button("=", f: 2),
+                        SizedBox(height: 5),
+                        Keyboard_Button("%"),
+                        SizedBox(height: 5),
+                        Keyboard_Button("^"),
+                        SizedBox(height: 5),
+                        Keyboard_Button("/"),
+                      ]),
+                    ),
+                  ],
+                )),
+          ),
+          Row(
+            children: [Keyboard_Button("AC"), Keyboard_Button("DEL")],
+          )
+        ],
+      ),
     );
   }
 }
@@ -131,12 +139,14 @@ class Keypad extends StatelessWidget {
 //TODO::FUNCTIONALITY FOR = AND DEL AND FULL SCREEN MODE AND AUTO SCROLL TO BOTTOM
 class Keyboard_Button extends StatelessWidget {
   String s;
-  Keyboard_Button(this.s);
+  int f;
+  Keyboard_Button(this.s, {this.f = 1});
   @override
   Widget build(BuildContext context) {
     screenstatus s1 = Provider.of<screenstatus>(context);
     String screen = s1.getscreen();
     return Expanded(
+      flex: f,
       child: OutlinedButton(
         onPressed: () {
           if (s == "AC") {
@@ -144,6 +154,8 @@ class Keyboard_Button extends StatelessWidget {
             s1.clearscreen();
           } else if (s == "=") {
             s1.outputresult(screen);
+          } else if (s == "DEL") {
+            s1.setscreen(screen.substring(0, screen.length - 1));
           }
           //TODO::ADD A DELETE LAST CHAR BUTTON
           else {
