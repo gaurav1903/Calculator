@@ -72,20 +72,33 @@ class screenstatus with ChangeNotifier {
     //if 2 operators together then second must be - or it is invalid in case it is - then take the next operand(must be)  appended with -
     //forgot to see multiple dig numbers
     while (i < s.length) {
-      log(i.toString() + " index");
+      log(i.toString() + " $op index");
       var x = s[i];
       int a = s.codeUnitAt(i) - 48;
       if (a >= 0 && a <= 9) {
+        if (op == 0) {
+          //
+          // log("check point 101");
+          if (q.isNotEmpty) {
+            var w = q.removeLast();
+            // log(w + " check p 2");
+            var v = double.parse(w);
+            int code = 1;
+            if (v < 0) code = -1;
+            // log(v.toString());
+            x = (v * 10 + double.parse(x) * code).toString();
+          }
+        }
         q.addLast(x);
         op = 0;
       } else {
         if (op == 1) {
-          log("point 1");
+          // log("point 1");
           if (s[i] != '-')
             return Queue();
           else {
             op = 0;
-            log("ran " + i.toString());
+            // log("ran " + i.toString());
             if (s.codeUnitAt(i + 1) - 48 >= 0 && s.codeUnitAt(i + 1) - 48 <= 9)
               q.addLast('-' + s[i + 1]);
             else {
@@ -105,6 +118,7 @@ class screenstatus with ChangeNotifier {
             q.addLast(stk.pop());
           }
         } else {
+          //*,/,%,^
           op = 1;
           while (!stk.isEmpty && compare(stk.top(), x) == false) {
             var z = stk.pop();
