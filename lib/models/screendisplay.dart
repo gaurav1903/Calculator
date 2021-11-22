@@ -116,7 +116,17 @@ class screenstatus with ChangeNotifier {
         q.addLast(x);
         op = 0;
       } else {
-        if (op == 1 && x != '(') {
+        if (q.isEmpty) {
+          if (x != '-')
+            return Queue();
+          else {
+            //TODO::IF NEXT CHAR IS NOT INT
+            var x = -1 * double.parse(s[i + 1]);
+            i++;
+            q.addLast(x.toString());
+            op = 0;
+          }
+        } else if (op == 1 && x != '(') {
           log("point 1");
           if (s[i] != '-')
             return Queue();
