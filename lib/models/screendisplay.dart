@@ -136,7 +136,7 @@ class screenstatus with ChangeNotifier {
           stk.push(x);
           op = 1;
         } else if (x == ')') {
-          op = 1;
+          op = 0;
           var z = stk.top();
           while (z != '(') {
             //TODO::OVERFLOW
