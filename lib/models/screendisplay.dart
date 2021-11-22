@@ -93,6 +93,7 @@ class screenstatus with ChangeNotifier {
     int op = 0;
     var q = Queue();
     int i = 0;
+    int first = 0;
     //if 2 operators together then second must be - or it is invalid in case it is - then take the next operand(must be)  appended with -
     while (i < s.length) {
       log(i.toString() + " $op index");
@@ -100,6 +101,7 @@ class screenstatus with ChangeNotifier {
       int a = s.codeUnitAt(i) - 48;
       log("check here");
       if (a >= 0 && a <= 9) {
+        first = 1;
         if (op == 0) {
           //
           // log("check point 101");
@@ -116,7 +118,8 @@ class screenstatus with ChangeNotifier {
         q.addLast(x);
         op = 0;
       } else {
-        if (q.isEmpty) {
+        if (first == 0) {
+          first = 1;
           if (x != '-')
             return Queue();
           else {
@@ -146,9 +149,10 @@ class screenstatus with ChangeNotifier {
             i++;
           }
         }
-        //operator
+        //brackets fix
         else if (x == '(') {
           stk.push(x);
+          first = 0;
           op = 1;
         } else if (x == ')') {
           op = 0;
