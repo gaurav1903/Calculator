@@ -120,7 +120,9 @@ class screenstatus with ChangeNotifier {
           if (x != '-')
             return Queue();
           else {
-            //TODO::IF NEXT CHAR IS NOT INT
+            if (i + 1 == s.length ||
+                s.codeUnitAt(i + 1) - 48 < 0 ||
+                s.codeUnitAt(i + 1) - 48 > 9) return Queue();
             var x = -1 * double.parse(s[i + 1]);
             i++;
             q.addLast(x.toString());
@@ -133,6 +135,9 @@ class screenstatus with ChangeNotifier {
           else {
             op = 0;
             log("ran " + i.toString());
+            if (i + 1 == s.length ||
+                s.codeUnitAt(i + 1) - 48 < 0 ||
+                s.codeUnitAt(i + 1) - 48 > 9) return Queue();
             if (s.codeUnitAt(i + 1) - 48 >= 0 && s.codeUnitAt(i + 1) - 48 <= 9)
               q.addLast('-' + s[i + 1]);
             else {
