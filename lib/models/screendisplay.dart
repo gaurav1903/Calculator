@@ -22,7 +22,7 @@ class screenstatus with ChangeNotifier {
 
   void outputresult(String s) {
     ///TODO:LOGIC FOR COMPUTING CALC
-    String ans = calc(s).toString();
+    String ans = calc(s);
     screen = ans;
     notifyListeners();
   }
@@ -33,14 +33,37 @@ class screenstatus with ChangeNotifier {
     return ans;
   }
 
+  String postfixeval(Queue q) {
+    var s = st.Stack();
+    while (q.isNotEmpty) {
+      var z = q.removeFirst();
+      if (['+', '-', '*', '/', '%', '^'].contains(z)) {
+        var b = s.pop();
+        var a = s.pop();
+        if (z == '+')
+          s.push(a + b);
+        else if (z == '-')
+          s.push(a - b);
+        else if (z == '*')
+          s.push(a * b);
+        else if (z == '/')
+          s.push(a / b);
+        else if (z == '%')
+          s.push(a % b);
+        else
+          s.push(math.pow(a, b));
+      } else {
+        s.push(double.parse(z));
+      }
+    }
+    return s.pop().toString();
+  }
+
   String calc(String s) {
     //easier method is to convert expr to postfix(it removes brackets too) to handle neggatives be careful and then evaluate
     Queue q = postfix(s);
     if (q.isEmpty) return "INVALID";
-    while (q.isNotEmpty) {
-      log(q.removeFirst());
-    }
-    return "";
+    return postfixeval(q);
     //FIRST DRAFT COMPLETE
   }
 
