@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
       create: (context) => screenstatus(),
       child: Scaffold(
           appBar: AppBar(
-            title: Text("Gaurav's Calculator"),
+            title: Text("BODMAS Calculator"),
             backgroundColor: Colors.deepPurple,
           ),
           body: Calc()),
